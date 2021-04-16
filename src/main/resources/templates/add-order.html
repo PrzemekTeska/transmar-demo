@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dodawanie zlecenia</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/add-order-style.css}"/>
+
+</head>
+<body>
+<div id="orders-container">
+    <a th:href="@{/orders}"><input type="button" id="back-button" class="btn btn-primary" value="Powrót"></a>
+
+    <div class="card" style="max-width: 20%; margin-left: 40%;">
+        <div class="card-body">
+            <h4>Dodawanie zlecenia</h4> <br/>
+            <form th:action="@{/save-order}" th:object="${order}" method="post" onsubmit="return dataValidation()">
+
+                <div class="form-group">
+                    <label class="label">Numer zlecenia:</label>
+                    <input type="text" class="form-control" id="orderNumber" name="orderNumber"
+                           th:field="*{orderNumber}"/>
+                </div>
+                <div class="form-group">
+                    <label>Numer samochodu:</label>
+                    <p th:if="${vehicleList.isEmpty()}"><a href="/add-vehicle">Dodaj samochód</a></p>
+                    <select id="truckNumber" th:if="${!vehicleList.isEmpty()}" class="form-control"
+                            th:field="*{vehicle.id}">
+                        <option th:each="vehicle : ${vehicleList}" th:value="${vehicle.id}" th:text="${vehicle.number}">
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Numer naczepy:</label>
+                    <p th:if="${trailerList.isEmpty()}"><a href="/add-trailer">Dodaj naczepę</a></p>
+
+                    <select id="trailerNumber" th:if="${!trailerList.isEmpty()}" class="form-control"
+                            th:field="*{trailer.id}">
+                        <option th:each="trailer : ${trailerList}" th:value="${trailer.id}" th:text="${trailer.number}">
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Kierowca:</label>
+                    <p th:if="${driverList.isEmpty()}"><a href="/add-driver">Dodaj kierowcę</a></p>
+
+                    <select id="driver" th:if="${!driverList.isEmpty()}" class="form-control" th:field="*{driver.id}">
+                        <option th:each="driver : ${driverList}" th:value="${driver.id}"
+                                th:text="${driver.firstName} + ' ' + ${driver.lastName}">
+                        </option>
+                    </select>
+                </div>
+
+                <label class="label">Data załadunku:</label>
+                <input class="form-control" type="date" id="loadingDate" name="loadingDate" th:field="*{loadingDate}"/>
+
+                <div class="form-group">
+                    <label class="label">Data rozładunku:</label>
+                    <input class="form-control" type="date" id="unloadingDate" name="unloadingDate"
+                           th:field="*{unloadingDate}"/>
+                </div>
+                <label class="label">Ilość kilometrów:</label>
+                <input class="form-control" type="text" id="kilometres" name="kilometres" th:field="*{kilometres}"/>
+
+                <div class="form-group">
+                    <label class="label">Maut:</label>
+                    <input class="form-control" type="text" id="maut" name="maut" th:field="*{maut}"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="label">Bonus:</label>
+                    <input class="form-control" type="text" id="bonus" name="bonus" th:field="*{bonus}"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="label">Stawka:</label>
+                    <input class="form-control" type="number" step=".01" id="rate" name="rate" th:field="*{rate}"/>
+                </div>
+
+                <input th:disabled="${vehicleList.isEmpty() || trailerList.isEmpty() || driverList.isEmpty()}"
+                       class="btn btn-primary" type="submit"
+                       value="Dodaj zlecenie" id="add-button"/>
+                <br th:if="${vehicleList.isEmpty()}"/>
+                <p th:if="${vehicleList.isEmpty()}"><small style="color: red">Musisz dodać pojazd!</small></p>
+                <p th:if="${trailerList.isEmpty()}"><small style="color: red">Musisz dodać naczepę!</small></p>
+                <p th:if="${driverList.isEmpty()}"><small style="color: red">Musisz dodać kierowcę!</small></p>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+</body>
+
+<script>
+    function dataValidation() {
+        let loadingDate = new Date(document.getElementById("loadingDate").value);
+        let unloadingDate = new Date(document.getElementById("unloadingDate").value);
+        var orderNumber = document.getElementById("orderNumber").value;
+        var kilometres = document.getElementById("kilometres").value;
+        var maut = document.getElementById("maut").value;
+        var bonus = document.getElementById("bonus").value;
+
+
+        if ((orderNumber !== "" && kilometres !== "" && kilometres !== "0"
+            && maut !== "" && bonus !== "") && loadingDate < unloadingDate) {
+            return true;
+        }
+        alert("Coś nie tak! Sprawdź czy uzupełniłeś wszystkie pola, daty i czy kilometry nie są równe 0.")
+        return false;
+    }
+
+
+</script>
+</html>

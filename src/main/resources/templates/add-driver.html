@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dodawanie pojazdu</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/add-order-style.css}"/>
+
+</head>
+<body>
+<div id="add-vehicle-container">
+    <a th:href="@{/drivers}"><input type="button" id="back-button" class="btn btn-primary" value="Powrót"></a>
+
+    <div class="card" style="max-width: 20%; margin-left: 40%;">
+        <div class="card-body">
+            <h4>Dodawanie kierowcy</h4> <br/>
+            <form th:action="@{/save-driver}" th:object="${driver}" method="post" onsubmit="return dataValidation()">
+                <div class="form-group">
+                    <label class="label">Imię*:</label>
+                    <input type="text" class="form-control" id="firstName" name="firstName"
+                           th:field="*{firstName}"/>
+                </div>
+                <div class="form-group">
+                    <label>Nazwisko*:</label>
+                    <input type="text" class="form-control" id="lastName" name="lastName"
+                           th:field="*{lastName}"/>
+                </div>
+                <div class="form-group">
+                    <label class="label">Data zatrudnienia:</label>
+                    <input class="form-control" type="date" id="dateOfEmployment" name="dateOfEmployment"
+                           th:field="*{dateOfEmployment}"/>
+                </div>
+
+                <input class="btn btn-primary" type="submit" value="Dodaj kierowcę" id="add-button"/>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+
+<script>
+    function dataValidation() {
+        var firstName = document.getElementById("firstName").value;
+        var lastName = document.getElementById("lastName").value;
+
+        if (firstName !== "" && lastName !== "") {
+            return true;
+        }
+        alert("Uzupełnij imię i nazwisko kierowcy!");
+        return false;
+    }
+
+</script>
+</html>

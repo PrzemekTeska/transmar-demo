@@ -1,0 +1,48 @@
+body {
+    background: url("../images/add-order-bg.jpg") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height: 937px;
+}
+
+#back-button {
+    float: left;
+    margin-left: 2%;
+    margin-top: 1%;
+}
+
+#orders-container {
+    width: 100%;
+    height: auto;
+    background-color: white;
+    opacity: 0.95;
+}
+
+#expenses-container {
+    width: 100%;
+    background-color: white;
+    opacity: 0.95;
+    padding-bottom: 2%;
+}
+
+#add-vehicle-container {
+    width: 100%;
+    height: 103.45%;
+    background-color: white;
+    opacity: 0.95;
+}
+
+#expenses-wrapper {
+    padding-top: 1%;
+}
+
+#back-button-expenses {
+    float: left;
+    margin-left: 2%;
+}
+
+.card {
+    top: 1%;
+}

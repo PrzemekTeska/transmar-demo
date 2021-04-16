@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dodawanie kosztów</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/add-order-style.css}"/>
+
+</head>
+<body>
+
+<div id="expenses-container">
+    <div id="expenses-wrapper">
+        <a th:href="@{/expenses}"><input type="button" value="Powrót" id="back-button-expenses" class="btn btn-primary"></a>
+
+        <div class="card" style="max-width: 20%; margin-left: 40%;">
+            <div class="card-body">
+                <h4>Dodawanie kosztów</h4><br/>
+                <form th:action="@{/save-expense}" th:object="${expense}" method="post"
+                      onsubmit="return dataValidation()">
+                    <div class="form-group">
+                        <label class="label">Miesiąc i rok:</label>
+                        <input type="month" class="form-control" id="expenseMonthAndYear" name="expenseMonthAndYear"
+                               th:field="*{expenseMonthYear}"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Numer samochodu:</label>
+                        <p th:if="${vehicleList.isEmpty()}"><a href="/add-vehicle">Dodaj samochód</a></p>
+                        <select id="truckNumber" th:if="${!vehicleList.isEmpty()}" class="form-control" th:field="*{vehicle.id}">
+                            <option th:each="vehicle : ${vehicleList}" th:value="${vehicle.id}" th:text="${vehicle.number}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+
+                        <label class="label">Autostrady:</label>
+                        <input type="text" class="form-control" id="highwaysExpenses" name="highwaysExpenses"
+                               th:field="*{highwaysExpenses}"/>
+
+                    </div>
+                    <div class="form-group">
+
+                        <label class="label">Paliwo:</label>
+                        <input type="text" class="form-control" id="fuelExpenses" name="fuelExpenses"
+                               th:field="*{fuelExpenses}"/>
+                    </div>
+                    <label class="label">Pensja:</label>
+                    <input type="text" class="form-control" id="driverSalary" name="driverSalary"
+                           th:field="*{driverSalary}"/>
+                    <div class="form-group">
+
+                        <label class="label">Zus:</label>
+                        <input type="text" class="form-control" id="zus" name="zus" th:field="*{zus}"/>
+                    </div>
+                    <label class="label">Leasing:</label>
+                    <input type="text" class="form-control" id="leasing" name="leasing" th:field="*{leasing}"/>
+                    <div class="form-group">
+
+                        <label class="label">Ubezpieczenie:</label>
+                        <input type="text" class="form-control" id="insurance" name="insurance"
+                               th:field="*{insurance}"/>
+                    </div>
+                    <label class="label">Odsetki:</label>
+                    <input type="text" class="form-control" id="interest" name="interest" th:field="*{interest}"/>
+                    <div class="form-group">
+
+                        <label class="label">Podatek dochodowy:</label>
+                        <input type="text" class="form-control" id="incomeTax" name="incomeTax"
+                               th:field="*{incomeTax}"/>
+                    </div>
+                    <div class="form-group">
+
+                        <label class="label">Inne koszty:</label>
+                        <input type="text" class="form-control" id="otherExpenses" name="otherExpenses"
+                               th:field="*{otherExpenses}"/>
+                    </div>
+                    <input th:disabled="${vehicleList.isEmpty()}" class="btn btn-primary" type="submit"
+                           value="Dodaj koszty" id="add-button"/>
+                    <br th:if="${vehicleList.isEmpty()}"/>
+                    <small th:if="${vehicleList.isEmpty()}" style="color: red">Najpierw musisz dodać pojazd!</small>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script>
+
+    function regexCheck(value) {
+        var rgx = new RegExp("^[0-9]*\.?[0-9]*$");
+
+        return value.match(rgx)
+
+    }
+
+    function dataValidation() {
+
+        var isExpenseUnique = /*[[${isExpenseUnique}]]*/ true;
+
+        if (isExpenseUnique === false) {
+            alert("Koszty na ten samochód na ten miesiąc są już dodane.");
+            return false;
+        }
+
+
+        let expenseMonthAndYear = new Date(document.getElementById("expenseMonthAndYear").value);
+
+        var truckNumber = document.getElementById("truckNumber").value;
+        var highwaysExpenses = document.getElementById("highwaysExpenses").value;
+
+        var fuelExpenses = document.getElementById("fuelExpenses").value;
+        var driverSalary = document.getElementById("driverSalary").value;
+        var zus = document.getElementById("zus").value;
+        var leasing = document.getElementById("leasing").value;
+
+
+        var insurance = document.getElementById("insurance").value;
+        var interest = document.getElementById("interest").value;
+        var incomeTax = document.getElementById("incomeTax").value;
+        var otherExpenses = document.getElementById("otherExpenses").value;
+
+        if (highwaysExpenses !== "" && fuelExpenses !== "" && driverSalary !== "" && zus !== "" &&
+            leasing !== "" && insurance !== "" && interest !== "" && incomeTax !== ""
+            && (expenseMonthAndYear instanceof Date && !isNaN(expenseMonthAndYear))) {
+
+            document.getElementById("highwaysExpenses").value = highwaysExpenses.replace(",", ".");
+            document.getElementById("fuelExpenses").value = fuelExpenses.replace(",", ".");
+            document.getElementById("driverSalary").value = driverSalary.replace(",", ".");
+            document.getElementById("zus").value = zus.replace(",", ".");
+            document.getElementById("leasing").value = leasing.replace(",", ".");
+            document.getElementById("insurance").value = insurance.replace(",", ".");
+            document.getElementById("interest").value = interest.replace(",", ".");
+            document.getElementById("incomeTax").value = incomeTax.replace(",", ".");
+            document.getElementById("otherExpenses").value = otherExpenses.replace(",", ".");
+
+
+            if (regexCheck(document.getElementById("highwaysExpenses").value) && regexCheck(document.getElementById("fuelExpenses").value)
+                && regexCheck(document.getElementById("driverSalary").value) && regexCheck(document.getElementById("zus").value)
+                && regexCheck(document.getElementById("leasing").value) && regexCheck(document.getElementById("insurance").value)
+                && regexCheck(document.getElementById("interest").value) && regexCheck(document.getElementById("incomeTax").value)
+                && regexCheck(document.getElementById("otherExpenses").value))
+                return true;
+            else {
+                alert("Zły format danych.");
+                return false;
+            }
+        } else {
+            alert("Coś nie tak! Sprawdź czy uzupełniłeś wszystkie pola.");
+            return false;
+        }
+    }
+
+
+</script>
+</html>

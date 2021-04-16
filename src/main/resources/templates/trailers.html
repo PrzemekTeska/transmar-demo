@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Naczepy</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="../static/css/orders-style.css" th:href="@{/css/orders-style.css}" rel="stylesheet"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<div th:insert="fragments/navbar :: navbar"></div>
+
+
+<div id="container">
+    <a th:href="@{/add-trailer}"><input type="button" id="add-button" class="btn btn-primary" value="Dodaj naczepę"></a>
+    <div class="table-wrapper">
+        <input class="form-control" id="search-bar" type="text" placeholder="Szukaj..."> <br/>
+
+        <table class="table table-striped table-hover">
+            <tr>
+                <th>Numer naczepy</th>
+            </tr>
+            <tbody id="myTable">
+            <tr th:each="trailer: ${trailerList}">
+                <td th:text="${trailer.number}"/>
+                <td>
+                    <a th:href="@{/trailers/delete/{id}(id=${trailer.id})}" onclick="return deleteConfirmation()">
+                        <button type="button" class="btn btn-danger">Usuń</button>
+                    </a>
+                </td>
+                <td>
+                    <a th:href="@{/edit-trailer/{id}(id=${trailer.id})}">
+                        <input type="button" class="btn btn-primary" value="Edytuj">
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $("#search-bar").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+    function deleteConfirmation() {
+        return window.confirm("Czy na pewno usunąć tę naczepę?");
+    }
+
+</script>
+</body>
+</html>

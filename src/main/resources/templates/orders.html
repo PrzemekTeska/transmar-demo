@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Zlecenia</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="../static/css/orders-style.css" th:href="@{/css/orders-style.css}" rel="stylesheet"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<div th:insert="fragments/navbar :: navbar"></div>
+
+
+<div id="container">
+    <a th:href="@{/add-order}"><input type="button" id="add-button" class="btn btn-primary" value="Dodaj zlecenie"></a>
+    <div class="table-wrapper">
+        <div id="search-bars">
+            <input class="form-control" id="search-bar" type="text" placeholder="Szukaj..."/>
+            <input type="month" class="form-control" id="search-bar-date"/>
+            <button class="form-control" name="clear" id="clear_field" onclick="removeDateValue()">X</button>
+        </div>
+
+        <br/>
+        <div class="alert alert-success" role="alert" th:text="${success}" th:if="${success}"></div>
+        <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
+
+        <table class="table table-striped table-hover">
+            <tr>
+                <th>Numer zlecenia</th>
+                <th>Numer samochodu</th>
+                <th>Numer naczepy</th>
+                <th>Kierowca</th>
+                <th>Data załadunku</th>
+                <th>Data rozładunku</th>
+                <th>Ilość kilometrów</th>
+                <th>Kwota maut</th>
+                <th>Bonus</th>
+                <th>Stawka/km</th>
+                <th>Kwota zlecenia</th>
+            </tr>
+            <tbody id="myTable">
+            <tr th:each="order: ${orderList}">
+                <td th:text="${order.orderNumber}"/>
+                <td th:text="${order.vehicle.number}"/>
+                <td th:text="${order.trailer.number}"/>
+                <td th:text="${order.driver.lastName}"/>
+                <td th:text="${order.loadingDate}"/>
+                <td th:text="${order.unloadingDate}"/>
+                <td th:text="${order.kilometres}"/>
+                <td th:text="${order.maut}"/>
+                <td th:text="${order.bonus}"/>
+                <td th:text="${order.rate} + ' EUR'"/>
+                <td th:text="${order.orderAmount} + ' EUR'"/>
+                <td>
+                    <a th:href="@{/orders/delete/{id}(id=${order.id})}" onclick="return deleteConfirmation()">
+                        <button type="button" class="btn btn-danger">Usuń</button>
+                    </a>
+                </td>
+                <td>
+                    <a th:href="@{/edit-order/{id}(id=${order.id})}">
+                        <input type="button" class="btn btn-primary" value="Edytuj">
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $("#search-bar").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        $("#search-bar-date").on("change", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        $("#clear_field").on("click", function () {
+            var value = "";
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+    function removeDateValue() {
+        document.getElementById("search-bar-date").value = "";
+    }
+
+    function deleteConfirmation() {
+        return window.confirm("Czy na pewno usunąć te zlecenie?");
+    }
+
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Koszty</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="../static/css/orders-style.css" th:href="@{/css/orders-style.css}" rel="stylesheet"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<div th:insert="fragments/navbar :: navbar"></div>
+
+
+<div id="container">
+    <a th:href="@{/add-expense}"><input class="btn btn-primary" id="add-button" type="button" value="Dodaj koszty"></a>
+    <div class="table-wrapper">
+        <div id="search-bars">
+            <input class="form-control" id="search-bar" type="text" placeholder="Szukaj..."/>
+            <input type="month" class="form-control" id="search-bar-date"/>
+            <button class="form-control" name="clear" id="clear_field" onclick="removeDateValue()">X</button>
+        </div>
+        <br/>
+        <div class="alert alert-success" role="alert" th:text="${success}" th:if="${success}"></div>
+        <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
+        <table class="table table-striped table-hover">
+            <tr>
+                <th>Data</th>
+                <th>Numer samochodu</th>
+                <th>Autostrady</th>
+                <th>Paliwo</th>
+                <th>Pensja</th>
+                <th>ZUS</th>
+                <th>Leasing</th>
+                <th>Ubezpieczenie</th>
+                <th>Odsetki</th>
+                <th>Podatek dochodowy</th>
+                <th>Inne koszty</th>
+                <th>Suma</th>
+            </tr>
+            <tbody id="myTable">
+            <tr th:each="expense: ${expenseList}">
+                <td th:text="${expense.expenseMonthYear}"/>
+                <td th:text="${expense.vehicle.number}"/>
+                <td th:text="${expense.highwaysExpenses}"/>
+                <td th:text="${expense.fuelExpenses}"/>
+                <td th:text="${expense.driverSalary}"/>
+                <td th:text="${expense.zus}"/>
+                <td th:text="${expense.leasing}"/>
+                <td th:text="${expense.insurance}"/>
+                <td th:text="${expense.interest}"/>
+                <td th:text="${expense.incomeTax}"/>
+                <td th:text="${expense.otherExpenses}"/>
+                <td th:text="${expense.expenseAmount} + ' EUR'"/>
+                <td>
+                    <a th:href="@{/expenses/delete/{id}(id=${expense.id})}" onclick="return deleteConfirmation()">
+                        <input type="button" value="Usuń" class="btn btn-danger">
+                    </a>
+                </td>
+                <td>
+                    <a th:href="@{/edit-expense/{id}(id=${expense.id})}">
+                        <input type="button" value="Edytuj" class="btn btn-primary">
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $("#search-bar").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        $("#search-bar-date").on("change", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        $("#clear_field").on("click", function () {
+            var value = "";
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+    function removeDateValue() {
+        document.getElementById("search-bar-date").value = "";
+    }
+
+    function deleteConfirmation() {
+        return window.confirm("Czy na pewno usunąć te koszty?");
+    }
+
+</script>
+</body>
+</html>

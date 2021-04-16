@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edycja pojazdu</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/add-order-style.css}"/>
+
+</head>
+<body>
+<div id="add-vehicle-container">
+    <div id="expenses-wrapper">
+        <a th:href="@{/trailers}"><input class="btn btn-primary" type="button" value="Powrót" id="back-button"></a>
+
+        <div class="card" style="max-width: 20%; margin-left: 40%;">
+            <div class="card-body">
+                <h4>Edycja naczepy</h4>
+                <form th:action="@{/trailers/edit/{id}(id=${trailer.id})}" th:object="${trailer}" method="post"
+                      onsubmit="return dataValidation()">
+                    <div class="form-group">
+                        <label class="label">Numer naczepy*:</label>
+                        <input type="text" class="form-control" id="number" name="number"
+                               th:field="*{number}"/>
+                    </div>
+
+                    <input class="btn btn-primary" type="submit" value="Zapisz" id="add-button"/><br/><br/>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script>
+    function dataValidation() {
+
+        var number = document.getElementById("number").value;
+
+
+        if (number !== "") {
+            return true;
+        }
+        alert("Uzupełnij numer naczepy!")
+        return false;
+    }
+
+</script>
+</html>

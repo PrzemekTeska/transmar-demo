@@ -1,0 +1,82 @@
+body {
+    background: url("../images/orders-bg.jpg") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height: 937px;
+}
+
+#container {
+    width: 100%;
+    min-height: 100%;
+    height: auto;
+    background-color: white;
+    opacity: 0.95;
+}
+
+#add-button {
+    margin: 1%;
+    width: 172px;
+}
+
+#search-bar {
+    margin-left: 1%;
+    width: 172px;
+}
+
+#search-bar-date {
+    margin-left: 1%;
+    width: 200px;
+
+}
+
+#clear_field {
+    width: 40px;
+}
+
+#chart-div {
+    display: flex;
+    margin-left: 50%;
+}
+
+#chart-button {
+    margin-left: 5%;
+}
+
+#search-bars {
+    display: flex;
+}
+
+#chart-year {
+    width: 120px;
+}
+
+#chart {
+    width: 80%;
+    margin-left: 10%;
+    padding-top: 5%;
+}
+
+#chart-container {
+    width: 100%;
+    min-height: 100%;
+    height: auto;
+    background-color: white;
+    opacity: 0.95;
+}
+
+.td-sum {
+    font-weight: bold;
+    font-style: italic;
+}
+
+#summary {
+    margin-left: 10%;
+    margin-top: 2%;
+}
+
+.table {
+    width: 98%;
+    margin-left: 1%;
+}

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Zyski/straty</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="../static/css/orders-style.css" th:href="@{/css/orders-style.css}" rel="stylesheet"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<div th:insert="fragments/navbar :: navbar"></div>
+
+<div id="container">
+    <div style="padding-bottom: 1%;"></div>
+    <div id="search-bars">
+        <input class="form-control" id="search-bar" type="text" placeholder="Szukaj..."/>
+        <input type="month" class="form-control" id="search-bar-date"/>
+        <button class="form-control" name="clear" id="clear_field" onclick="removeDateValue()">X</button>
+        <div id="chart-div">
+            <input id="chart-year" class="form-control" type="number" th:value="${currentYear}" placeholder="Podaj rok" min="2020" max="2100"/>
+            <button id="chart-button" class="btn btn-primary" onclick="showChart()">Pokaż wykres</button>
+        </div>
+    </div>
+
+
+
+
+    <br/>
+    <div class="table-wrapper">
+        <table class="table table-striped table-hover">
+            <tr>
+                <th>Data</th>
+                <th>Numer samochodu</th>
+                <th>Zysk</th>
+                <th>Strata</th>
+                <th>Bilans</th>
+            </tr>
+            <tbody id="myTable">
+            <tr th:each="profitLoss: ${profitLossList}" th:class="${profitLoss.compareId == 1} ? 'td-sum' : ''">
+                <td th:text="${profitLoss.date}"/>
+                <td th:text="${profitLoss.vehicle.number}"/>
+                <td th:text="${profitLoss.profit}"/>
+                <td th:text="${profitLoss.loss}"/>
+                <td th:text="${profitLoss.getAmount()} + ' EUR'"/>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $("#search-bar").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        $("#search-bar-date").on("change", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        $("#clear_field").on("click", function () {
+            var value = "";
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+    function removeDateValue() {
+        document.getElementById("search-bar-date").value = "";
+    }
+
+    function showChart() {
+       var year = document.getElementById("chart-year").value;
+       if(year !== "") window.location.href = "/graph/" + year;
+       else alert("Musisz podać rok.")
+    }
+
+</script>
+</body>
+</html>

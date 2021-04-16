@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Wykres zysków/strat</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="../static/css/orders-style.css" th:href="@{/css/orders-style.css}" rel="stylesheet"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+
+</head>
+<body>
+<div th:insert="fragments/navbar :: navbar"></div>
+<div id="chart-container">
+
+    <div id="chart"></div>
+
+    <div id="summary">
+        <h2>Podsumowanie</h2>
+        <br/>
+        <p>Łączny zysk: <span th:text="${profit}"/> EUR</p>
+        <p>Łączna strata: <span th:text="${loss}"/> EUR</p>
+        <p>Razem: <span th:text="${profit - loss}"/> EUR</p>
+
+    </div>
+</div>
+
+<script th:inline="javascript">
+    $(function () {
+        Highcharts.chart('chart', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Wykres zysków/strat za rok [[${year}]]'
+            },
+            xAxis: {
+                categories: [[${map.keySet()}]],
+                crosshair: true,
+                format: '{value}'
+
+            },
+            yAxis: {
+                title: {
+                    text: 'Zysk/strata (w EUR)'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f} EUR</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: 'Zysk/strata',
+                data: [[${map.values()}]]
+            }]
+        });
+    });
+</script>
+</body>
+</html>
