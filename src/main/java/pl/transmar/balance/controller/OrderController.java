@@ -43,7 +43,7 @@ public class OrderController {
         model.addAttribute("driverList", driverService.getAllDrivers());
         model.addAttribute("trailerList", trailerService.getAllTrailers());
         Order order = new Order();
-        order.setRate(0.91);
+        order.setRate(0.50);
         return new ModelAndView("add-order", "order", order);
     }
 
